@@ -43,6 +43,13 @@
                         <p>Manage Evacuation Center</p>
                     </a>
                 </li>
+
+                  <li class="<?php echo $ul_maps; ?>">
+                    <a href="maps.php">
+                        <i class="pe-7s-map-marker"></i>
+                        <p>Maps</p>
+                    </a>
+                </li>
             </ul>
     	</div>
     </div>

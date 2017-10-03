@@ -33,7 +33,8 @@ $db_handle = new DBController();
                         </b></h3></span>
 
                         <div class="info-box-content">
-                          <span class="info-box-text text-center"><h4>IDPs Added</h4></span>
+
+                          <span class="info-box-text text-center"><h4>IDPs</h4></span>
                         </div>
                         <!-- /.info-box-content -->
                       </div>
