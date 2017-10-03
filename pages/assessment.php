@@ -255,7 +255,7 @@ $_SESSION['disaster_id'] = 1;
     
           });
 
-          $('.dataTables_filter input[type="search"]').attr('placeholder','Search IDP...').css({'width':'108%','display':'','border-radius':'0'});
+          $('.dataTables_filter input[type="search"]').attr('placeholder','Search IDP...').css({'width':'88%','display':'','border-radius':'0'});
 
           
       });

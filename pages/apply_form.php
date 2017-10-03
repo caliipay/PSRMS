@@ -75,7 +75,7 @@ include ('head.php');
                                 </form>
                             </div>
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-md-4">
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
@@ -124,7 +124,7 @@ include ('head.php');
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         </div>
                     </div>
                 </div>

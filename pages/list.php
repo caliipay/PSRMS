@@ -239,7 +239,7 @@ $_SESSION['disaster_id'] = 1;
             'dom': '<"row"<"col-md-6 table-label"><"col-md-3"l><"col-md-3"f>><"row"<"col-md-12"<"table"t>>><"row"<"col-md-6"i><"col-md-6"p>>'
           });
 
-          $('.dataTables_filter input[type="search"]').attr('placeholder','Search IDP...').css({'width':'108%','display':'','border-radius':'0'});
+          $('.dataTables_filter input[type="search"]').attr('placeholder','Search IDP...').css({'width':'88%','display':'','border-radius':'0'});
 
           
       });

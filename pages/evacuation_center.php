@@ -184,7 +184,7 @@ $db_handle = new DBController();
             'dom': '<"row"<"col-md-6 table-label"><"col-md-3"l><"col-md-3"f>><"row"<"col-md-12"<"table"t>>><"row"<"col-md-6"i><"col-md-6"p>>'
           });
 
-          $('.dataTables_filter input[type="search"]').attr('placeholder','Search Evacuation Center...').css({'width':'108%','display':'','border-radius':'0'});
+          $('.dataTables_filter input[type="search"]').attr('placeholder','Search Evacuation Center...').css({'width':'88%','display':'','border-radius':'0'});
 
           
       });
