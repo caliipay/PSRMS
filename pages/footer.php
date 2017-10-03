@@ -26,13 +26,13 @@
 	<script src="../js/light-bootstrap-dashboard.js"></script>
 
 	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
-	<script src="../js/demo.js"></script>
+	
 
     <script src="../js/sweetalert2.min.js"></script>
 
-    <script src="../js/jquery.dataTables.js"></script>
+    <script src="../js/jquery.dataTables.min.js"></script>
 
-    <script src="../js/dataTables.bootstrap.js"></script>
+    <script src="../js/dataTables.bootstrap.min.js"></script>
 
     
 </html>

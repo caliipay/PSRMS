@@ -10,6 +10,7 @@ unset($_SESSION['form_name']);
 <?php include ('navbar.php'); ?>
 
 <?php include ('footer.php'); ?>
+<?php include ('demo.php'); ?>
 <?php
 require_once("dbcontroller.php");
 $db_handle = new DBController();
@@ -19,62 +20,169 @@ $db_handle = new DBController();
 
         <div class="content">
             <div class="container-fluid">
-                <!-- <div class="row">
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="header text-center">
-                                HOY!
-                            </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-aqua"><h3><b>
+                        <?php 
+                            $idp = $db_handle->runFetch("SELECT * FROM `idp`");
+                            echo count($idp);
+
+                        ?>
+                            
+                        </b></h3></span>
+
+                        <div class="info-box-content">
+                          <span class="info-box-text text-center"><h4>IDPs</h4></span>
                         </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
                     </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="header text-center">
-                                HOY!
-                            </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-red"><h3><b>
+                        <?php 
+                            $assessments = $db_handle->runFetch("SELECT DISTINCT `IDP_IDP_ID` FROM `form_answers`");
+                            echo count($assessments);
+
+                        ?>
+                        </b></h3></span>
+
+                        <div class="info-box-content">
+                          <span class="info-box-text text-center"><h4>IDPs Assessed</h4></span>
                         </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
                     </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="header text-center">
-                                HOY!
-                            </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-green"><h3><b>
+                             <?php 
+                            $intake_answers = $db_handle->runFetch("SELECT DISTINCT `IDP_IDP_ID` FROM `intake_answers`");
+                            echo count($intake_answers );
+
+                        ?>
+
+
+                        </b></h3></span>
+
+                        <div class="info-box-content">
+                          <span class="info-box-text text-center"><h4>IDPs Intaked</h4></span>
                         </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
                     </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="header text-center">
-                                HOY!
-                            </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-yellow"><h3><b>
+
+                                  <?php 
+                            $evacuation_centers = $db_handle->runFetch("SELECT * FROM `evacuation_centers` WHERE 1");
+                            echo count($evacuation_centers);
+
+                        ?>
+                        </b></h3></span>
+
+                        <div class="info-box-content">
+                          <span class="info-box-text text-center"><h4>Evacuation Centers </h4></span>
                         </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
                     </div>
-                </div> -->
+               
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-yellow"><h3><b>
+
+                                  <?php 
+                            $evacuation_centers_idp = $db_handle->runFetch("SELECT * FROM idp INNER JOIN evacuation_centers ON evacuation_centers.EvacType = 1");
+                            echo count($evacuation_centers_idp);
+
+                        ?>
+                        </b></h3></span>
+
+                        <div class="info-box-content">
+                          <span class="info-box-text text-center"><h4>Evacuation Centers Based IDPS</h4></span>
+                        </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
+                    </div>
+
+                      <div class="col-md-3 col-sm-6 col-xs-12">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-yellow"><h3><b>
+
+                                  <?php 
+                            $evacuation_centers_idp = $db_handle->runFetch("SELECT * FROM idp INNER JOIN evacuation_centers ON evacuation_centers.EvacType = 2");
+                            echo count($evacuation_centers_idp);
+
+                        ?>
+                        </b></h3></span>
+
+                        <div class="info-box-content">
+                          <span class="info-box-text text-center"><h4>Home Based IDPS</h4></span>
+                        </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
+                    </div>
+                </div>  
+
+
+
+
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Recieved Intake Forms</h4>
-                                <p class="category"> Intake Form</p>
+                                <h4 class="title">Gender Distribution</h4>
+                                
                             </div>
                             <div class="content">
                                 <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
 
                                 <div class="footer">
                                     <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> Open
-                                        <i class="fa fa-circle text-danger"></i> Bounce
-                                        <i class="fa fa-circle text-warning"></i> Unsubscribe
+                                        <i class="fa fa-circle text-info"></i> Male
+                                        <i class="fa fa-circle text-danger"></i> Female
+                                        
                                     </div>
                                     <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-md-8">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Age Distribution</h4>
+                                
+                            </div>
+                            <div class="content">
+                                <div id="chartPreferences2" class="ct-chart ct-perfect-fourth"></div>
+
+                                <div class="footer">
+                                    <div class="legend">
+                                        <i class="fa fa-circle text-info"></i> Children (18 Below)<br>
+                                        <i class="fa fa-circle text-danger"></i> Adults (18 - 59)<br>
+                                        <i class="fa fa-circle text-warning"></i> Senior Citizen (60 Above)<br>
+                                        
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                   <!--  <div class="col-md-8">
                         <div class="card">
                             <div class="header">
                                 <h4 class="title">Users Behavior</h4>
@@ -96,7 +204,9 @@ $db_handle = new DBController();
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
+
+
 
 
 

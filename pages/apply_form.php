@@ -1,19 +1,22 @@
-<?php $ul_assessment = "active"; include ('sidebar.php'); ?>
+
 <?php
 require('check_credentials.php');
-include ('head.php'); 
+include ('footer.php');
+include ('head.php');
 ?>
+
+<?php $ul_assessment = "active"; include ('sidebar.php'); ?>
 
     <div class="main-panel">
         
 <?php include ('navbar.php'); ?>
-<?php include ('footer.php'); ?>
+
 <?php
     require_once("dbcontroller.php");
     $idpID = $_GET['id'];
     $userID = $_SESSION['userID'];
     $db_handle = new DBController();
-    $forms = $db_handle->runFetch("SELECT * FROM `form` WHERE 1");
+    $forms = $db_handle->runFetch("SELECT * FROM `form` WHERE 1 ORDER BY FormType");
     $idp = $db_handle->runFetch("SELECT * FROM `idp` WHERE IDP_ID = ".$idpID);
     $idp_name;
     $idp_age_group;
@@ -32,13 +35,16 @@ include ('head.php');
                                 <h4>Current IDP: 
                                     <?php if(!empty($idp)) {
                                         foreach ($idp as $result) {
-                                            echo ('<b>'.$result['Lname'].', '.$result['Fname'].' '.$result['Mname'].'</b><br>IDP ID: <b>'.$result['IDP_ID'].'</b>');
+                                        ?>
+                                    <b><?php echo($result['Lname'].', '.$result['Fname'].' '.$result['Mname']); ?></b>
+                                        <?php
                                             $idp_name = $result['Lname'].', '.$result['Fname'].' '.$result['Mname'];
                                             if($result['Age'] < 18) {
                                                 $idp_age_group = 2;
                                             } else {
                                                 $idp_age_group = 1;
                                             }
+                                        
                                         }
                                     } ?>
                                         
@@ -47,82 +53,31 @@ include ('head.php');
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <form action="submit_add_idp_form.php" method="post">
+                                <form action="informed_consent.php" method="post">
                                     <div class="form-group">
-                                        <label for="formType"><h5><b>Select Form Type</b></h5></label>
-                                        <div class="row">
-                                            <div class="col-md-10">
-                                                <select class="form-control" name="formType">
-                                                <b><?php
-                                                    if(!empty($forms)) {
-                                                        foreach ($forms as $form) {
-                                                            if($idp_age_group == $form['AgeGroup'] || $form['AgeGroup'] == null) {
-                                                                echo ('<option name="'.$form['FormType'].'" value="'.$form['FormID'].'">'.$form['FormType'].'</option>');
-                                                            }
-                                                        }
-                                                    }?>
-                                                </b>    
-                                                </select>
+                                        <div class="col-md-12"><h5><b>Select Tool(s):</b></h5></div>
+                                            <div class="col-md-12">
+                                                <?php
+                                                if(!empty($forms)) {
+                                                    foreach ($forms as $form) {
+                                                ?>
+                                                <div class="col-md-6">
+                                                    <input type="checkbox" name="type-<?php echo($form["FormID"]); ?>" id="<?php echo($form["FormID"]); ?>">&nbsp;
+                                                    <label for="<?php echo($form["FormID"]); ?>"><?php echo($form["FormType"]) ?></label>
+                                                </div>
+                                                <?php
+                                                    }
+                                                }
+                                                ?>
                                                 <input type="hidden" name="idpID" value="<?php echo($idpID); ?>">
                                                 <input type="hidden" name="idp_name" value="<?php echo($idp_name); ?>">
                                                 <input type="hidden" name="previous_page" value="<?php echo($_SERVER['HTTP_REFERER']); ?>"> 
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-12">
                                                 <button class="btn btn-info btn-fill form-control" type="submit"><i class="fa fa-check"></i>&nbsp;Submit</button> 
                                             </div>
-                                        </div>
                                     </div>
                                 </form>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="panel panel-primary">
-                                    <div class="panel-body">
-                                        <input type="checkbox" aria-label="...">
-                                        <h5 class="text-center">Qualitative Assessment</h5>
-                                    </div>
-                                </div>
-                            </div>
-                             <div class="col-md-4">
-                                <div class="panel panel-primary">
-                                    <div class="panel-body">
-                                        <input type="checkbox" aria-label="...">
-                                        <h5 class="text-center">Quali and Quanti -ASDI Form (interview)</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="panel panel-primary">
-                                    <div class="panel-body">
-                                        <input type="checkbox" aria-label="...">
-                                        <h5 class="text-center">PHQ-9</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="panel panel-primary">
-                                    <div class="panel-body">
-                                        <input type="checkbox" aria-label="...">
-                                        <h5 class="text-center">Combined PCL-5 and ASD with Translations</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="panel panel-primary">
-                                    <div class="panel-body">
-                                        <input type="checkbox" aria-label="...">
-                                        <h5 class="text-center">Global Functioning</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="panel panel-primary">
-                                    <div class="panel-body">
-                                        <input type="checkbox" aria-label="...">
-                                        <h5 class="text-center">Generalized Anxiety Disorder Measure</h5>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         </div>
