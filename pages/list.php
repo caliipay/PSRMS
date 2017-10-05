@@ -100,7 +100,7 @@ $_SESSION['disaster_id'] = 1;
                     <div class="col-md-12">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">CSWD </h4> <br>
+                                <h4 class="title">IDP</h4> <br>
 
 
 
