@@ -5,6 +5,7 @@ class DBController {
     private $password = "";
     private $database = "psrms";
     private $conn;
+    private $stmt;
     public $update_status;
     public $lastID;
     public $entryCount;
@@ -21,19 +22,30 @@ class DBController {
         }
     }
     
-    function runFetch($query) {
-        $sth = $this->conn->query($query);
-        while($row = $sth->fetch(PDO::FETCH_ASSOC)) {
+    function runFetch() {
+        $this->stmt->execute();
+        while($row = $this->stmt->fetch(PDO::FETCH_ASSOC)) {
             $resultset[] = $row;
         }
-        $this->entryCount = $sth->fetchColumn();
+        $this->entryCount = $this->stmt->fetchColumn();
         if(!empty($resultset))
             return $resultset;
     }
+    
+    function prepareStatement($query) {
+        $this->stmt = $this->conn->prepare($query);
+    }
+    
+    function bindVar($param, $value, $type, $length) {
+        if($length == 0) {
+            $this->stmt->bindParam($param, $value, $type);
+        } else {
+            $this->stmt->bindParam($param, $value, $type, $length);
+        }
+    }
 
-    function runUpdate($query) {
-        $stmt = $this->conn->prepare($query);
-        $status = $stmt->execute();
+    function runUpdate() {
+        $status = $this->stmt->execute();
         if($status) {
             $this->update_status = true;
             $this->lastID = $this->conn->lastInsertId(); //ID of recently inserted value

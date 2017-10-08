@@ -1,5 +1,5 @@
 
-<?php $ul_index = "active"; include ('sidebar.php'); ?>
+<?php session_start(); $ul_index = "active"; include ('sidebar.php'); ?>
 <?php include ('head.php'); ?>
 
     <div class="main-panel">

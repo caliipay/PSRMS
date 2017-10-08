@@ -1,8 +1,8 @@
 
-<?php include ('head.php'); ?>
+<?php session_start(); include ('head.php'); ?>
 
 <?php 
-$ul_index = ""; $ul_forms = "active";
+$ul_index = ""; $ul_maps = "active";
 include ('sidebar.php'); ?>
 
     <div class="main-panel">

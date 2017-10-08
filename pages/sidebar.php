@@ -1,5 +1,4 @@
-
-    <div class="sidebar" data-color="blue">
+<div class="sidebar" data-color="blue">
 
     	<div class="sidebar-wrapper">
             <div class="logo">
@@ -15,6 +14,19 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                <?php
+                if($_SESSION["account_type"] == 77) {
+                ?>
+                <li class="<?php echo $ul_muser; ?>">
+                    <a href="admmui.php">
+                        <i class="pe-7s-key"></i>
+                        <p>Manage Users</p>
+                    </a>
+                </li>
+                <?php
+                }
+                ?>
+
                 <li id = "m_idp" class="<?php echo $ul_list; ?>">
                     <a href="list.php" class="<?php echo $ul_idp; ?>"> 
 
@@ -53,5 +65,3 @@
             </ul>
     	</div>
     </div>
-                                
-

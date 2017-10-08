@@ -1,4 +1,4 @@
-<?php $ul_index = "active"; $ul_forms = ""; $ul_idp =""; include ('sidebar.php'); ?>
+<?php session_start(); $ul_index = "active"; $ul_forms = ""; $ul_idp =""; include ('sidebar.php'); ?>
 <?php include ('head.php'); ?>
 
 <style type="text/css">

@@ -1,6 +1,5 @@
-<?php $ul_assessment = "active"; include ('sidebar.php'); ?>
+<?php session_start(); $ul_assessment = "active"; include ('sidebar.php'); ?>
 <?php 
-session_start();
 include ('head.php'); ?>
 
 
