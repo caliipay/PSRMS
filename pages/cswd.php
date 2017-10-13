@@ -1,4 +1,4 @@
-<?php session_start(); $ul_index = "active"; $ul_forms = ""; $ul_idp =""; include ('sidebar.php'); ?>
+<?php include("check_credentials.php"); $ul_index = ""; $ul_forms = ""; $ul_list ="active"; include ('sidebar.php'); ?>
 <?php include ('head.php'); ?>
 
 <style type="text/css">
@@ -16,12 +16,12 @@
 
 </style>
 <div class="main-panel">
-<?php
+    <?php
     include ('navbar.php');
     include ('footer.php');
     require_once("dbcontroller.php");
     $db_handle = new DBController();
-?>
+    ?>
     <form method="POST" action="adddemo.php">
         <div class="content">
             <div class="container-fluid">
@@ -31,122 +31,78 @@
                         <!-- page start-->
                         <div class="row" style="margin-top: 20px;">
                             <div class="col-lg-12">
-
                                 <div class="row">
-
                                     <div  id = "personal_info_div" class="col-lg-6">
                                         <div class="panel panel-info">
                                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                                                 <div class="panel-heading"><h6><b>Personal Information</b></h6></div>
                                             </a>
                                             <div class="panel-body panel-collapse collapse in" id="collapseOne">
-                                                <div class="form-group col-md-4">
-                                                    <label>Last Name<span class="required">*</span></label>
-                                                    <input class="form-control" id = 'Lname' name='Lname' placeholder="Enter Last name" required>
+                                                <div class="form-group col-md-6">
+                                                    <!--<label>Last Name<span class="required">*</span></label>-->
+                                                    <input class="form-control" id = 'Lname' name='Lname' placeholder="Enter Last name">
                                                 </div>
-                                                <div class="form-group col-md-4">
-                                                    <label>First Name<span class="required">*</span></label>
-                                                    <input class="form-control" name='Fname' placeholder="Enter First name" required>
+                                                <div class="form-group col-md-6">
+                                                    <!--<label>First Name<span class="required">*</span></label>-->
+                                                    <input class="form-control" name='Fname' placeholder="Enter First name">
                                                 </div>
-                                                <div class="form-group col-md-4">
-                                                    <label>Middle Name<span class="required">*</span></label>
-                                                    <input class="form-control" name='Mname' placeholder="Enter Middle Name" required>
+                                                <div class="form-group col-md-6">
+                                                    <!--<label>Middle Name<span class="required">*</span></label>-->
+                                                    <input class="form-control" name='Mname' placeholder="Enter Middle Name">
+                                                </div>
+
+                                                <div class="form-group col-md-6">
+                                                    <!--<label>Date of birth<span class="required">*</span></label>-->
+                                                    <input type="date" name='Bdate' class="form-control">
+
                                                 </div>
 
                                                 <div class="form-group col-md-4">
-                                                    <label>Date of birth<span class="required">*</span></label>
-                                                    <input type="date" name='Bdate' class="form-control" required>
-
-                                                </div>
-
-                                                <div class="form-group col-md-4">
-                                                    <label>Age<span class="required">*</span></label>
-                                                    <input class="form-control" name='Age' placeholder="Enter age" type="number" min="0" required>
+                                                    <!--<label>Age<span class="required">*</span></label>-->
+                                                    <input class="form-control" name='Age' placeholder="Enter age" type="number" min="0">
                                                 </div>
                                                 <div class="form-group col-md-4">
-                                                    <label>Gender<span class="required">*</span></label>
-                                                    <select name='Gender' class="form-control" required>
+                                                    <!--<label>Gender<span class="required">*</span></label>-->
+                                                    <select name='Gender' class="form-control">
+                                                        <option disabled="disabled">Gender</option>
                                                         <option value="1">Male</option>
                                                         <option value="2">Female</option>
+                                                        <option>Not specified</option>
                                                     </select>             
                                                 </div>
-
+                                                
                                                 <div class="form-group col-md-4">
-                                                    <label>Ethnicity<span class="required">*</span></label>
-                                                    <select name='Ethnicity' class="form-control" required>
-                                                        <option value="1">Maranao</option>
-                                                        <option value="2">Cebuano</option>
-                                                    </select>             
-                                                </div>
-
-                                                <div class="form-group col-md-4">
-                                                    <label>Religion<span class="required">*</span></label>
-                                                    <select name='Religion' class="form-control" required>
-                                                        <option value="1">Islam</option>
-                                                        <option value="2">Roman Catholic</option>
-                                                    </select>             
-                                                </div>
-
-                                                <div class="form-group col-md-4">
-                                                    <label>Marital Status<span class="required">*</span></label>
-                                                    <select name='MaritalStatus' class="form-control" required>
+                                                    <!--<label>Marital Status<span class="required">*</span></label>-->
+                                                    <select name='MaritalStatus' class="form-control">
+                                                        <option disabled="disabled">Marital Status</option>
                                                         <option value="1">Single</option>
                                                         <option value="2">Married</option>
                                                         <option value="3">Annulled</option>
-                                                        <option value="4">Widowed</option>
+                                                        <option value="4">Widowed</option>                                                       <option>Not specified</option>
+
                                                     </select>             
                                                 </div>
 
-                                                <div class="form-group col-sm-6">
-                                                    <label>Relation to the family head<span class="required">*</span></label>
-                                                    <select class="form-control col-md-12" id="relation" name='relation'  required>
-                                                        <option value="1">Head</option>
-                                                        <option value="2">Wife</option>
-                                                        <option value="3">Son</option>
-                                                        <option value="4">Daughter</option>
-                                                        <option value="other">Others</option>
-                                                    </select>
+                                                <div class="form-group col-md-6">
+                                                    <!--<label>Ethnicity<span class="required">*</span></label>-->
+                                                    <input class="form-control" name='Ethnicity' placeholder="Enter Ethnicity">           
                                                 </div>
 
-                                                <div class="form-group col-md-6" id = 'serial_no_div'>
-                                                    <label>Serial No<span class="required">*</span></label>
-                                                    <input class="form-control" id = 'serial_no' name='serial_no' placeholder="Enter Serial No" required>
-                                                    <br>
-
-                                                </div>
-
-
-
-
-                                                <div id="displayHead"  class="form-group">	
-                                                    <label>Select Head of the Family:</label>
-                                                    <select class="form-control" id= 'selected_head' name='selected_head' >
-                                                        <option>  <label>Select Head of the Family<span class="required">*</span></label> </option>
-                                                        <?php
-
-                                                        $results = $db_handle->runFetch("SELECT * FROM dafac_no");
-
-                                                        foreach ($results as $result) {
-
-                                                        ?>
-                                                        <option value='<?= $result['DAFAC_SN']; ?>' ><?= $result['Name']; ?></option>
-                                                        <?php } ?>
-
-                                                    </select>
-                                                    <div class="form-group">
-                                                        <label>If family head do not exist.</label>
-                                                        <input id='target2' class="form-control" style='display:none' type='text' name='relationOther' placeholder="Enter head of the family"/>
-                                                    </div>
+                                                <div class="form-group col-md-6">
+                                                    <!--<label>Religion<span class="required">*</span></label>-->
+                                                    <input class="form-control" name='Religion' placeholder="Enter Religion">        
                                                 </div>
 
                                                 <div class="form-group col-md-12">
-                                                    <label>Educational Attainment<span class="required">*</span></label>
+                                                    <!--<label>Educational Attainment<span class="required">*</span></label>-->
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <select class="form-control" id="education" onchange = "ShowHideDiv()">
+                                                            <select class="form-control" id="Education" name="Education">
+                                                                <option disabled="disabled">Educational Attainment</option>
                                                                 <option value="elementary">Elementary</option>
                                                                 <option value="highschool">Highschool</option>
-                                                                <option value="college">College</option>    
+                                                                <option value="college">College</option>
+                                                                <option>Not Specified</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-md-6">
@@ -184,142 +140,24 @@
                                                 </div>
 
                                                 <div class="form-group col-md-6">
-                                                    <label>Employment/Occupation</label>
-                                                    <input class="form-control" name="occupation" placeholder="Enter occupation" required>
+                                                    <!--<label>Employment/Occupation</label>-->
+                                                    <input class="form-control" name="Occupation" placeholder="Enter occupation">
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                    <label>Monthly Net Income</label>
-                                                    <input class="form-control" name="net_income" placeholder="Enter Monthly Income " required>
+                                                    <!--<label>Monthly Net Income</label>-->
+                                                    <input class="form-control" name="net_income" placeholder="Enter Monthly Income ">
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                    <label>Phone Number<span class="required">*</span></label>
+                                                    <!--<label>Phone Number<span class="required">*</span></label>-->
                                                     <input class="form-control" name='PhoneNum' placeholder="Enter phone number" id = "PhoneNum">
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                    <label>Email<span class="required">*</span></label>
+                                                    <!--<label>Email<span class="required">*</span></label>-->
                                                     <input class="form-control" id='Email' name='Email' placeholder="your@mail.com">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div id = "contact_div">
-    <div class="col-lg-6">
-    <div class="panel panel-info" id="accordion">
-    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
-    <div class="panel-heading"><h6><b>Contact Information</b></h6></div>
-    </a>
-    <div class="panel-body panel-collapse collapse in" id="collapseFour">                           
-    <div class="form-group col-md-6">
-    <label>Phone Number<span class="required">*</span></label>
-    <input class="form-control" name='PhoneNum' placeholder="Enter phone number" id = "PhoneNum">
-    </div>
-    <div class="form-group col-md-6">
-    <label>Email<span class="required">*</span></label>
-    <input class="form-control" id='Email' name='Email' placeholder="your@mail.com">
-    </div>
-    <div class="form-group col-md-6">
-    <label>Other Contact<span class="required">*</span></label>
-    <input class="form-control" id='OtherContact' name='OtherContact' placeholder="Enter other contact">
-    </div>
-    </div>
-    </div>
-    </div>
-    </div> -->
-
-
-                                    <div id = "relocation_div">
-                                        <div class="col-lg-6">
-                                            <div class="panel panel-info" id="accordion">
-                                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                                                    <div class="panel-heading"><h6><b>Relocation Address</b></h6></div>
-                                                </a>
-                                                <div class="panel-body panel-collapse collapse in" id="collapseThree">      
-                                                    <div class="form-group col-md-6">
-                                                        <label>Type of Relocation<span class="required">*</span></label>
-
-                                                        <select class="form-control" name="EvacType" id="EvacType" >
-                                                            <option value="1">Evacuation Center</option>
-                                                            <option value="2">Home-based</option>
-                                                        </select> 
-                                                    </div> 
-                                                    <div id="EvacName" class="form-group col-md-6">
-                                                        <label>Name of the Evacuation Center<span class="required">*</span></label>
-                                                        <select name="EvacName" class="form-control">
-                                                            <?php
-
-                                                            $results = $db_handle->runFetch("SELECT * FROM evacuation_centers");
-
-                                                            foreach ($results as $result) {
-
-                                                            ?>
-                                                            <option value="<?= $result['EvacuationCentersID']; ?>"><?= $result['EvacName']; ?></option>
-                                                            <?php } ?>
-                                                        </select> 
-                                                    </div>
-                                                    <div id = "home_based_div">
-                                                        <div class="form-group col-md-6">
-                                                            <label for="province">Province<span class="required">* for home-based</span></label>
-                                                            <select name='province' id='province' class="form-control" required>
-                                                                <?php
-                                                                $results = $db_handle->runFetch("SELECT * FROM province");
-
-                                                                foreach ($results as $result) {
-                                                                ?>
-                                                                <option value="<?= $result['ProvinceID']; ?>"><?= $result['ProvinceName']; ?></option>
-                                                                <?php } ?>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label>District<span class="required">* for home-based</span></label>
-                                                            <select name='district' id='district' class="form-control" required>
-                                                                <?php
-                                                                $results = $db_handle->runFetch("SELECT * FROM district");
-
-                                                                foreach ($results as $result) {
-                                                                ?>
-                                                                <option value="<?= $result['DistrictID']; ?>"><?= $result['DistrictName']; ?></option>
-                                                                <?php } ?>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label>City/Municipality<span class="required">* for home-based</span></label>
-                                                            <select name="city_mun" id="city_mun" class="form-control" required>
-                                                                <?php
-
-
-                                                                $results = $db_handle->runFetch("SELECT * FROM city_mun, province WHERE city_mun.PROVINCE_ProvinceID=province.ProvinceID");
-
-                                                                foreach ($results as $result) {
-
-                                                                ?>
-                                                                <option value="<?= $result['City_Mun_ID']; ?>"><?= $result['City_Mun_Name']; ?></option>
-                                                                <?php } ?>
-                                                            </select>  
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label>Barangay<span class="required">* for home-based</span></label>
-                                                            <select name="barangay2" id="barangay2" class="form-control" required>
-                                                                <?php
-
-                                                                $results = $db_handle->runFetch("SELECT * FROM barangay, city_mun WHERE barangay.City_CityID=city_mun.City_Mun_ID");
-
-                                                                foreach ($results as $result) {
-                                                                ?>
-                                                                <option value="<?= $result['BarangayID']; ?>"><?= $result['BarangayName']; ?></option>
-                                                                <?php } ?>
-                                                            </select> 
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label>Street/Purok<span class="required">*for home-based</span></label>
-                                                            <input class="form-control" name="SpecificAddress1" placeholder="144 Purok Sampaguita" type="textbox"/>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <div id = "home_address_div">
                                         <div class="col-lg-6">
                                             <div class="panel panel-info" id="accordion">
@@ -328,92 +166,126 @@
                                                 </a>
                                                 <div class="panel-body panel-collapse collapse in" id="collapseTwo"> 
                                                     <div class="form-group col-md-6">
-                                                        <label for="province">Province<span class="required">*</span></label>
+                                                        <!--<label for="province">Province<span class="required">*</span></label>-->
                                                         <select name='province' id='province' class="form-control">
+                                                            <option disabled="disabled">Province</option>
+                                                            <option>-please select-</option>
                                                             <?php
-
-                                                            $results = $db_handle->runFetch("SELECT * FROM province");
-
+                                                            $results = $db_handle->runFetch("SELECT * FROM `province` ORDER BY ProvinceName");
                                                             foreach ($results as $result) {
-
                                                             ?>
                                                             <option value="<?= $result['ProvinceID']; ?>"><?= $result['ProvinceName']; ?></option>
                                                             <?php } ?>
                                                         </select>
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label>District<span class="required">*</span></label>
-                                                        <select name='district' id='district' class="form-control">
+                                                        <!--<label>City/Municipality<span class="required">*</span></label>-->
+                                                        <select name="city_mun" id="city_mun" class="form-control" style="display:none">
+                                                            <option disabled="disabled">City/Municipality</option>
                                                             <?php
-
-                                                            $results = $db_handle->runFetch("SELECT * FROM district");
+                                                            $results = $db_handle->runFetch("SELECT * FROM city_mun JOIN province ON city_mun.PROVINCE_ProvinceID = province.ProvinceID ORDER BY `City_Mun_Name`");
                                                             foreach ($results as $result) {
                                                             ?>
-                                                            <option value="<?= $result['DistrictID']; ?>"><?= $result['DistrictName']; ?></option>
+                                                            <option value="<?php echo($result['City_Mun_ID']); ?>" name="province-<?php echo($result['ProvinceID']); ?>"><?php echo($result['City_Mun_Name']); ?></option>
                                                             <?php } ?>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label>City/Municipality<span class="required">*</span></label>
-                                                        <select name="city_mun" id="city_mun" class="form-control">
-                                                            <?php
-
-                                                            $results = $db_handle->runFetch("SELECT * FROM city_mun, province WHERE city_mun.PROVINCE_ProvinceID=province.ProvinceID");
-
-                                                            foreach ($results as $result) {
-                                                            ?>
-                                                            <option value="<?= $result['City_Mun_ID']; ?>"><?= $result['City_Mun_Name']; ?></option>
-                                                            <?php } ?>
+                                                            <option selected="selected">...</option>
                                                         </select>  
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label>Barangay<span class="required">*</span></label>
-                                                        <select name="barangay1" id="barangay1" class="form-control" required>
+                                                        <!--<label>Barangay<span class="required">*</span></label>-->
+                                                        <select name="barangay1" id="barangay1" class="form-control" style="display:none">
+                                                            <option disabled="disabled">Barangay</option>
+                                                            <option>-please select-</option>
                                                             <?php
-
-
-                                                            $results = $db_handle->runFetch("SELECT * FROM barangay, city_mun WHERE barangay.City_CityID=city_mun.City_Mun_ID");
-
+                                                            $results = $db_handle->runFetch("SELECT * FROM `barangay` JOIN city_mun ON barangay.City_CityID = city_mun.City_Mun_ID ORDER BY `BarangayName`");
                                                             foreach ($results as $result) {
-
                                                             ?>
-                                                            <option value="<?= $result['BarangayID']; ?>"><?= $result['BarangayName']; ?></option>
+                                                            <option value="<?php echo($result['BarangayID']); ?>" name="city-<?php echo($result['City_CityID']) ?>"><?php echo($result['BarangayName']); ?></option>
                                                             <?php } ?>
                                                         </select> 
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label>Street/Purok<span class="required">*</span></label>
-                                                        <input class="form-control" name="SpecificAddress" placeholder="144 Purok Sampaguita" type="textbox"/>
+                                                        <!--<label>Street/Purok<span class="required">*</span></label>-->
+                                                        <input id="specAdd" class="form-control" name="SpecificAddress" placeholder="Specific address (optional)" type="textbox" style="display:none"/>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div id = "sector_div">
+                                    <div id = "relocation_div">
                                         <div class="col-lg-6">
                                             <div class="panel panel-info" id="accordion">
-                                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
-                                                    <div class="panel-heading"><h6><b>Sectors</b></h6></div>
+                                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                                    <div class="panel-heading"><h6><b>Relocation Address</b></h6></div>
                                                 </a>
-                                                <div class="panel-body panel-collapse collapse in" id="collapseFive">                           
-                                                    <?php
-
-                                                    $results = $db_handle->runFetch("SELECT * FROM sector");
-
-                                                    foreach ($results as $result) {
-
-                                                    ?>
-                                                    <div class="checkbox col-md-4">
-                                                        <label class="checkbox-inline"  style ="display: visible !important;"><input value="<?= $result['SectorID']; ?>"  data-toggle="checkbox" type="checkbox" name='sector'><?= $result['Name']; ?></label>
+                                                <div class="panel-body panel-collapse collapse in" id="collapseThree">      
+                                                    <div class="form-group col-md-6">
+                                                        <!--<label>Type of Relocation<span class="required">*</span></label>-->
+                                                        <select class="form-control" name="EvacType" id="EvacType" >
+                                                            <option disabled="disabled">Relocation Type</option>
+                                                            <option value="1">Evacuation Center</option>
+                                                            <option value="2">Home-based</option>
+                                                        </select> 
+                                                    </div> 
+                                                    <div id="EvacName" class="form-group col-md-6">
+                                                        <!--<label>Name of the Evacuation Center<span class="required">*</span></label>-->
+                                                        <select name="EvacName" class="form-control">
+                                                            <?php
+                                                            $results = $db_handle->runFetch("SELECT * FROM evacuation_centers");
+                                                            foreach ($results as $result) {
+                                                            ?>
+                                                            <option value="<?= $result['EvacuationCentersID']; ?>"><?= $result['EvacName']; ?></option>
+                                                            <?php } ?>
+                                                        </select> 
                                                     </div>
-                                                    <?php } ?>
+                                                    <div id = "home_based_div">
+                                                        <div class="form-group col-md-6">
+                                                            <!--<label for="province">Province<span class="required">*</span></label>-->
+                                                            <select name='province2' id='province2' class="form-control">
+                                                                <option disabled="disabled">Province</option>
+                                                                <option>-please select-</option>
+                                                                <?php
+                                                                $results = $db_handle->runFetch("SELECT * FROM `province` ORDER BY ProvinceName");
+                                                                foreach ($results as $result) {
+                                                                ?>
+                                                                <option value="<?= $result['ProvinceID']; ?>"><?= $result['ProvinceName']; ?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <!--<label>City/Municipality<span class="required">*</span></label>-->
+                                                            <select name="city_mun2" id="city_mun2" class="form-control" style="display:none">
+                                                                <option disabled="disabled">City/Municipality</option>
+                                                                <?php
+                                                                $results = $db_handle->runFetch("SELECT * FROM city_mun JOIN province ON city_mun.PROVINCE_ProvinceID = province.ProvinceID ORDER BY `City_Mun_Name`");
+                                                                foreach ($results as $result) {
+                                                                ?>
+                                                                <option value="<?php echo($result['City_Mun_ID']); ?>" name="province2-<?php echo($result['ProvinceID']); ?>"><?php echo($result['City_Mun_Name']); ?></option>
+                                                                <?php } ?>
+                                                                <option selected="selected">...</option>
+                                                            </select>  
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <!--<label>Barangay<span class="required">*</span></label>-->
+                                                            <select name="barangay2" id="barangay2" class="form-control" style="display:none">
+                                                                <option disabled="disabled">Barangay</option>
+                                                                <option>-please select-</option>
+                                                                <?php
+                                                                $results = $db_handle->runFetch("SELECT * FROM `barangay` JOIN city_mun ON barangay.City_CityID = city_mun.City_Mun_ID ORDER BY `BarangayName`");
+                                                                foreach ($results as $result) {
+                                                                ?>
+                                                                <option value="<?php echo($result['BarangayID']); ?>" name="city2-<?php echo($result['City_CityID']) ?>"><?php echo($result['BarangayName']); ?></option>
+                                                                <?php } ?>
+                                                            </select> 
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <!--<label>Street/Purok<span class="required">*</span></label>-->
+                                                            <input id="specAdd2" class="form-control" name="SpecificAddress2" placeholder="Specific address (optional)" type="textbox" style="display:none"/>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-
-
                                         </div>
-
                                     </div>
                                     <input type="submit" class="btn btn-info btn-fill" value="Submit" style="margin-left: 20px;">
                                 </div>
@@ -431,4 +303,57 @@
 <!-- nice scroll -->
 <script src="js/jquery.scrollTo.min.js"></script>
 <script src="js/jquery.nicescroll.js" type="text/javascript"></script><!--custome script for all page-->
-<script src="js/scripts.js"></script>
+<script type='text/javascript'>
+    $(document).ready(function(){
+        $('#Education').change(function(){
+            if ($(this).val() == 'elementary') {
+                $('#elementary1').show();
+                $('#highschool1').hide();
+                $('#college1').hide();
+            } else if ($(this).val() == 'highschool') {
+                $('#elementary1').hide();
+                $('#highschool1').show();
+                $('#college1').hide();       
+            } else if ($(this).val() == 'college') {
+                $('#elementary1').hide();
+                $('#highschool1').hide();
+                $('#college1').show();       
+            } else {
+                $('#elementary1').hide();
+                $('#highschool1').hide();
+                $('#college1').hide(); 
+            }
+        });
+        $('#province').change(function(){
+            $("#city_mun").show();
+            $("#city_mun option[name*='province-']").hide();
+            $("#city_mun option[name='province-"+$(this).val()+"']").show();
+        });
+        $('#city_mun').change(function(){
+            $("#barangay1").show();
+            $("#barangay1 option[name*='city-']").hide();
+            $("#barangay1 option[name='city-"+$(this).val()+"']").show();
+            $("#specAdd").show();
+        });
+        $('#EvacType').change(function(){
+            if ($(this).val() == '1') {
+                $('#EvacName').show();
+                $('#home_based_div').hide();
+            } else if ($(this).val() == '2') {
+                $('#EvacName').hide();
+                $('#home_based_div').show();       
+            }
+        });
+        $('#province2').change(function(){
+            $("#city_mun2").show();
+            $("#city_mun2 option[name*='province2-']").hide();
+            $("#city_mun2 option[name='province2-"+$(this).val()+"']").show();
+        });
+        $('#city_mun2').change(function(){
+            $("#barangay2").show();
+            $("#barangay2 option[name*='city2-']").hide();
+            $("#barangay2 option[name='city2-"+$(this).val()+"']").show();
+            $("#specAdd2").show();
+        });
+    });
+</script>

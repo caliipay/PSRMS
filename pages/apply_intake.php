@@ -6,7 +6,7 @@
             require('check_credentials.php');
             include("css_include.php");
             $idpID = $_GET['id'];
-            $userID = $_SESSION['userID'];
+            $userID = $_SESSION['UserID'];
             $formID;
             $ag = $_GET['ag'];
             if($ag == 1) {

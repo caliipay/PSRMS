@@ -10,12 +10,12 @@ unset($_SESSION['form_name']);
     <?php
     include ('navbar.php');
     include ('footer.php');
-    include ('demo.php');
-    require_once("dbcontroller.php");
+    include_once("dbcontrollerPDO.php");
     $db_handle = new DBController();
     $_SESSION['loc']=$_SERVER['PHP_SELF'];
     
-    $agencies = $db_handle->runFetch("SELECT * FROM `agency` WHERE 1 ORDER BY AgencyName");
+    $db_handle->prepareStatement("SELECT * FROM `agency` ORDER BY AgencyName");
+    $agencies = $db_handle->runFetch();
     ?>
 
     <div class="content">
@@ -37,52 +37,52 @@ unset($_SESSION['form_name']);
                                     <div class="panel">
                                         <div class="panel-body panel-collapse collapse" id="collapseOne">
                                             <div class="form-group col-md-4">
-                                                <label for="Lname">Last Name<span class="required">*</span></label>
-                                                <input class="form-control" id = 'Lname' name='Lname' placeholder="Enter Last name" required>
+                                                <!--<label for="Lname">Last Name<span class="required">*</span></label>-->
+                                                <input class="form-control" id = 'Lname' name='Lname' placeholder="Last name" required>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label for="Fname">First Name<span class="required">*</span></label>
-                                                <input class="form-control" id="Fname" name='Fname' placeholder="Enter First name" required>
+                                                <!--<label for="Fname">First Name<span class="required">*</span></label>-->
+                                                <input class="form-control" id="Fname" name='Fname' placeholder="First name" required>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label for="Mname">Middle Name<span class="required">*</span></label>
-                                                <input class="form-control" id='Mname' name='Mname' placeholder="Enter Middle Name" required>
+                                                <!--<label for="Mname">Middle Name<span class="required">*</span></label>-->
+                                                <input class="form-control" id='Mname' name='Mname' placeholder="Middle Name" required>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label for="Bdate">Date of birth<span class="required">*</span></label>
+                                                <!--<label for="Bdate">Date of birth<span class="required">*</span></label>-->
                                                 <input type="date" id="Bdate" name='Bdate' class="form-control" required>
 
                                             </div>
 
                                             <div class="form-group col-md-4">
-                                                <label for="Age">Age<span class="required">*</span></label>
-                                                <input class="form-control" id="Age" name='Age' placeholder="Enter age" type="number" min="0" required>
+                                                <!--<label for="Age">Age<span class="required">*</span></label>-->
+                                                <input class="form-control" id="Age" name='Age' placeholder="Age" type="number" min="0" required>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label for="Gender">Gender<span class="required">*</span></label>
+                                                <!--<label for="Gender">Gender<span class="required">*</span></label>-->
                                                 <select id="Gender" name='Gender' class="form-control" required>
                                                     <option value="1">Male</option>
                                                     <option value="2">Female</option>
                                                 </select>             
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="PhoneNum">Phone Number<span class="required">*</span></label>
-                                                <input class="form-control" id="PhoneNum" name='PhoneNum' placeholder="Enter phone number" id = "PhoneNum">
+                                                <!--<label for="PhoneNum">Phone Number<span class="required">*</span></label>-->
+                                                <input class="form-control" id="PhoneNum" name='PhoneNum' placeholder="Phone Number" id = "PhoneNum">
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="Email">Email<span class="required">*</span></label>
+                                                <!--<label for="Email">Email<span class="required">*</span></label>-->
                                                 <input type="email" class="form-control" id='Email' name='Email' placeholder="your@mail.com">
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="pwd1">Password<span class="required">*</span></label>
+                                                <!--<label for="pwd1">Password<span class="required">*</span></label>-->
                                                 <input type="password" class="form-control" id="pwd1" name="pwd1" placeholder="Enter password" pattern="(?=^.{10,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" oninvalid="this.setCustomValidity('Atleast 10 chars. 1 uppercase, 1 lowercase, 1 special char')" oninput="setCustomValidity('')">
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="pwd2">Verify password<span class="required">*</span></label>
-                                                <input type="password" class="form-control" id="pwd2" name="pwd2" placeholder="Enter password" pattern="(?=^.{10,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" oninvalid="this.setCustomValidity('Atleast 10 chars. 1 uppercase, 1 lowercase, 1 special char')" oninput="setCustomValidity('')">
+                                                <!--<label for="pwd2">Verify password<span class="required">*</span></label>-->
+                                                <input type="password" class="form-control" id="pwd2" name="pwd2" placeholder="Verify password" pattern="(?=^.{10,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" oninvalid="this.setCustomValidity('Atleast 10 chars. 1 uppercase, 1 lowercase, 1 special char')" oninput="setCustomValidity('')">
                                             </div>
                                             <div class="form-group col-md-12">
-                                                <label><sup>Please note: Passwords should be at least 10 characters. Has atleast one letter, atleast one number, and atleast one special character</sup></label>
+                                                <label class="text-warning"><sup>Please note: Passwords should be at least 10 characters with atleast one letter and atleast one number or one special character</sup></label>
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label for="Agency">Agency<span class="required">*</span></label>

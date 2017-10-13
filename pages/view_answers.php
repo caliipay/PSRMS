@@ -1,5 +1,7 @@
 <?php
+//session_start();
     include ('check_credentials.php');
+    //echo(json_encode($_SESSION));
     include ('head.php');
     include ('footer.php');
     require_once("dbcontroller.php");
@@ -91,9 +93,9 @@
                                                     }
                                                 } else if($result['FormType'] == "text") {
                                                     if(isset($result['Answer'])) {
-                                                        echo '<input class="form-control" id="inputdefault" type="'.$result['FormType'].'" name="2-'.$result['QuestionsID'].'" value="'.$result['Answer'].'">';
+                                                        echo '<input class="form-control" type="'.$result['FormType'].'" name="2-'.$result['QuestionsID'].'" value="'.$result['Answer'].'" disabled="disabled">';
                                                     } else {
-                                                        echo '<input class="form-control" id="inputdefault" type="'.$result['FormType'].'" name="2-'.$result['QuestionsID'].'">';
+                                                        echo '<input class="form-control" type="'.$result['FormType'].'" name="2-'.$result['QuestionsID'].'">';
                                                     }
                                                 }
                                             }

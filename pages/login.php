@@ -12,7 +12,6 @@ if(isset($_SESSION["userID"])) {
     $db_handle->prepareStatement("SELECT * FROM `account` WHERE `Username` = :uName");
     $db_handle->bindVar(':uName', $_POST['email'], PDO::PARAM_STR,0);
     $result = $db_handle->runFetch();
-    echo(json_encode($result));
 
     if (password_verify($_POST['pwd'], $result[0]['Password'])) {
         $_SESSION["UserID"] = $result[0]['USER_UserID'];
@@ -24,15 +23,5 @@ if(isset($_SESSION["userID"])) {
         location='login_page.php';
         </script>";
     }
-
-    /*$_SESSION["userID"] = $_POST['userID'];
-    if($_POST['userID'] == 1) {
-        $_SESSION["account_type"] = 1;
-    } else {
-        $_SESSION["account_type"] = 0;
-    }
-    $_SESSION['disaster_id'] = 1;
-    header( "Location: dashboard.php" );
-    //echo(json_encode($_SESSION));*/
 }
 ?>

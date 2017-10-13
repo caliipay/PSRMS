@@ -98,12 +98,8 @@ $db_handle = new DBController();
                     <div class="col-md-12">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Evacuation Centers </h4> <br>
-
-
-
-                                <p class="category"> <i class="fa fa-square-o"></i> Evacuation Centers will be listed here</p> <br>
-                                <a class='btn btn-success btn-fill' href='add_evacuation.php'><i class='pe-7s-add-user'></i> Add New Evcuation Center</a>
+                                <h4 class="title">Evacuation Centers </h4>
+                                <a class='btn btn-success btn-fill btn-sm' href='add_evacuation.php'><i class='pe-7s-add-user'></i> Add New Evcuation Center</a>
                                 
                             </div>
 

@@ -15,7 +15,7 @@ include ('head.php');
     <?php
     require_once("dbcontroller.php");
     $idpID = $_GET['id'];
-    $userID = $_SESSION['userID'];
+    $userID = $_SESSION['UserID'];
     $db_handle = new DBController();
     $forms = $db_handle->runFetch("SELECT * FROM `form` WHERE 1 ORDER BY FormType");
     $idp = $db_handle->runFetch("SELECT * FROM `idp` WHERE IDP_ID = ".$idpID);
