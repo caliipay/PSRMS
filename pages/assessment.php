@@ -9,7 +9,7 @@ include ('head.php'); ?>
     <?php
     require_once("dbcontroller.php");
     $db_handle = new DBController();
-
+    $_SESSION['loc']=$_SERVER['PHP_SELF'];
     $_SESSION['disaster_id'] = 1;
     ?>
 

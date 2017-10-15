@@ -2,7 +2,7 @@
 include ('check_credentials.php');
 include ('head.php');
 include ('footer.php');
-require_once("dbcontroller.php");
+require_once("dbcontrollerPDO.php");
 include("css_include.php");
 include("core_include.php");
 $formID = $_POST['formID'];
@@ -10,13 +10,21 @@ $questTranslations = array();   //final associative array of tokenized questions
 $languages = array();           //array of available translation languages *updates in the question display foreach section
 $db_handle = new DBController();
 if(isset($_POST["isIntake"])) {
-    $form_info = $db_handle->runFetch("SELECT * FROM `intake` WHERE IntakeID = ".$formID);
+    $db_handle->prepareStatement("SELECT * FROM `intake` WHERE IntakeID = :formID");
+    $db_handle->bindVar(':formID', $formID. PDO::PARAM_INT, 0);
+    $form_info = $db_handle->runFetch();
     $itemStart = 0;
-    $questions = $db_handle->runFetch("SELECT INTAKE_IntakeID, QuestionsID, Question, html_form.HTML_FORM_TYPE as FormType, html_form.HTML_FORM_INPUT_QUANTITY as InputRange, AnswerType FROM intake JOIN questions on questions.INTAKE_IntakeID = intake.IntakeID JOIN html_form on questions.HTML_FORM_HTML_FORM_ID = html_form.HTML_FORM_ID WHERE intake.IntakeID = ".$formID);
+    $db_handle->prepareStatement("SELECT INTAKE_IntakeID, QuestionsID, Question, html_form.HTML_FORM_TYPE as FormType, html_form.HTML_FORM_INPUT_QUANTITY as InputRange, AnswerType FROM intake JOIN questions on questions.INTAKE_IntakeID = intake.IntakeID JOIN html_form on questions.HTML_FORM_HTML_FORM_ID = html_form.HTML_FORM_ID WHERE intake.IntakeID = :formID");
+    $db_handle->bindVar(':formID', $formID, PDO::PARAM_INT, 0);
+    $questions = $db_handle->runFetch();
 } else {
-    $form_info = $db_handle->runFetch("SELECT FormID, FormType, Instructions, ItemStart FROM `form` WHERE FormID = ".$formID);
+    $db_handle->prepareStatement("SELECT FormID, FormType, Instructions, ItemStart FROM `form` WHERE FormID = :formID");
+    $db_handle->bindVar(':formID', $formID, PDO::PARAM_INT,0);
+    $form_info = $db_handle->runFetch();
     $itemStart = 0;
-    $questions = $db_handle->runFetch("SELECT FORM_FormID, QuestionsID, Question, html_form.HTML_FORM_TYPE as FormType, html_form.HTML_FORM_INPUT_QUANTITY as InputRange, AnswerType FROM form JOIN questions on questions.FORM_FormID = form.FormID JOIN html_form on questions.HTML_FORM_HTML_FORM_ID = html_form.HTML_FORM_ID WHERE form.FormID = ".$formID);
+    $db_handle->prepareStatement("SELECT FORM_FormID, QuestionsID, Question, html_form.HTML_FORM_TYPE as FormType, html_form.HTML_FORM_INPUT_QUANTITY as InputRange, AnswerType FROM form JOIN questions on questions.FORM_FormID = form.FormID JOIN html_form on questions.HTML_FORM_HTML_FORM_ID = html_form.HTML_FORM_ID WHERE form.FormID = :formID");
+    $db_handle->bindVar(':formID', $formID, PDO::PARAM_INT,0);
+    $questions = $db_handle->runFetch();
 }
 ?>
 <style>

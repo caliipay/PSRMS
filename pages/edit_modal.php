@@ -1,5 +1,5 @@
 <?php
-require_once("dbcontroller.php");
+require_once("dbcontrollerPDO.php");
 $db_handle = new DBController();
 $editing = $_GET['editing'];
 $id = $_GET['id'];
@@ -7,13 +7,21 @@ $questTranslations = array();   //final associative array of tokenized questions
 $languages = array();           //array of available translation languages *updates in the question display foreach section
 
 if($editing === "title") {
-    $text = $db_handle->runFetch("SELECT form.FormType AS 'result' FROM `form` WHERE FormID =".$id);
+    $db_handle->prepareStatement("SELECT form.FormType AS 'result' FROM `form` WHERE FormID = :id");
+    $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+    $text = $db_handle->runFetch();
 } else if ($editing === "instr") {
-    $text = $db_handle->runFetch("SELECT form.Instructions AS 'result' FROM `form` WHERE FormID =".$id);
+    $db_handle->prepareStatement("SELECT form.Instructions AS 'result' FROM `form` WHERE FormID = :id");
+    $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+    $text = $db_handle->runFetch();
 } else if ($editing === "quest") {
-    $text = $db_handle->runFetch("SELECT questions.Question AS 'result' FROM `questions` WHERE QuestionsID =".$id);
+    $db_handle->prepareStatement("SELECT questions.Question AS 'result' FROM `questions` WHERE QuestionsID = :id");
+    $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+    $text = $db_handle->runFetch();
 } else if ($editing === "trans") {
-    $text = $db_handle->runFetch("SELECT QuestionsID, Question FROM `questions` WHERE FORM_FormID =".$id);
+    $db_handle->prepareStatement("SELECT QuestionsID, Question FROM `questions` WHERE FORM_FormID = :id");
+    $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+    $text = $db_handle->runFetch();
 } else {
     echo("ERROR!");
 }
@@ -56,7 +64,12 @@ if($editing === "trans") {
                             foreach($text as $question) {
                             ?>
                             <div class="form-group">
-                                <label for="question-<?php echo($question['QuestionsID']) ?>"><br><?php echo($question['Question']) ?></label>
+                                <label for="question-<?php echo($question['QuestionsID']) ?>"><br>
+                                    <?php
+                                    $arr = explode("[", $question['Question']);
+                                    echo($arr[0]);
+                                    ?>
+                                </label>
                                 <textarea class="form-control mdltxt" rows="5" name="question-<?php echo($question['QuestionsID']) ?>"></textarea>
                                 <input type="hidden" name="oldQuestion-<?php echo($question['QuestionsID']) ?>" value="<?php echo($question['Question']) ?>">
                             </div>
@@ -208,11 +221,17 @@ foreach($text as $result) { $old = $result['result']; }
                     <div class="item">  <!--Edit History-->
                     <?php
                     if($editing === "title") {
-                        $editHistory = $db_handle->runFetch("SELECT EditHistoryID, CONCAT(Lname, ', ', Fname, ' ', Mname) as Name, LastEdit, FORM_FormID, Remark FROM `edit_history` JOIN user ON user.UserID = edit_history.USER_UserID WHERE FORM_FormID = ".$id." AND Remark = 'edited the title' ORDER BY LastEdit DESC;");
+                        $db_handle->prepareStatement("SELECT EditHistoryID, CONCAT(Lname, ', ', Fname, ' ', Mname) as Name, LastEdit, FORM_FormID, Remark FROM `edit_history` JOIN user ON user.UserID = edit_history.USER_UserID WHERE FORM_FormID = :id AND Remark = 'edited the title' ORDER BY LastEdit DESC;");
+                        $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+                        $editHistory = $db_handle->runFetch();
                     } else if ($editing === "instr") {
-                        $editHistory = $db_handle->runFetch("SELECT EditHistoryID, CONCAT(Lname, ', ', Fname, ' ', Mname) as Name, LastEdit, FORM_FormID, Remark FROM `edit_history` JOIN user ON user.UserID = edit_history.USER_UserID WHERE FORM_FormID = ".$id." AND Remark = 'edited the instructions' ORDER BY LastEdit DESC;");
+                        $db_handle->prepareStatement("SELECT EditHistoryID, CONCAT(Lname, ', ', Fname, ' ', Mname) as Name, LastEdit, FORM_FormID, Remark FROM `edit_history` JOIN user ON user.UserID = edit_history.USER_UserID WHERE FORM_FormID = :id AND Remark = 'edited the instructions' ORDER BY LastEdit DESC;");
+                        $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+                        $editHistory = $db_handle->runFetch();
                     } else if ($editing === "quest") {
-                        $editHistory = $db_handle->runFetch("SELECT EditHistoryID, CONCAT(Lname, ', ', Fname, ' ', Mname) as Name, LastEdit, QUESTIONS_QuestionsID, Remark FROM `edit_history` JOIN user ON user.UserID = edit_history.USER_UserID WHERE QUESTIONS_QuestionsID = ".$id." AND Remark = 'edited this question' ORDER BY LastEdit DESC;");
+                        $db_handle->prepareStatement("SELECT EditHistoryID, CONCAT(Lname, ', ', Fname, ' ', Mname) as Name, LastEdit, QUESTIONS_QuestionsID, Remark FROM `edit_history` JOIN user ON user.UserID = edit_history.USER_UserID WHERE QUESTIONS_QuestionsID = :id AND Remark = 'edited this question' ORDER BY LastEdit DESC;");
+                        $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+                        $editHistory = $db_handle->runFetch();
                     } else {
                         echo("ERROR!");
                     }

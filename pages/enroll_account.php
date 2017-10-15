@@ -1,5 +1,5 @@
 <?php
-session_start();
+include("check_credentials.php");
 require_once("dbcontrollerPDO.php");
 $db_handle = new DBController();
 //echo(json_encode($_POST));

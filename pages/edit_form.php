@@ -1,6 +1,6 @@
 <?php
 include ('check_credentials.php');
-require_once("dbcontroller.php");
+require_once("dbcontrollerPDO.php");
 $ul_forms = "active";
 include ('sidebar.php');
 include ('core_include.php');
@@ -8,11 +8,15 @@ include ('head.php');
 
 $id = $_GET['form_id'];
 $db_handle = new DBController();
-$questions = $db_handle->runFetch("SELECT * FROM `questions` LEFT JOIN html_form ON html_form.HTML_FORM_ID = questions.HTML_FORM_HTML_FORM_ID WHERE FORM_FormID = ".$id);
+$db_handle->prepareStatement("SELECT * FROM `questions` LEFT JOIN html_form ON html_form.HTML_FORM_ID = questions.HTML_FORM_HTML_FORM_ID WHERE FORM_FormID = :id");
+$db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+$questions = $db_handle->runFetch();
 $questTranslations = array();   //final associative array of tokenized questions and translations
 $languages = array(); //array of available translation languages *updates in the question display foreach section
 $qCount = $db_handle->getFetchCount();
-$form_info = $db_handle->runFetch("SELECT * FROM `form` WHERE FormID = ".$id);
+$db_handle->prepareStatement("SELECT * FROM `form` WHERE FormID = :id");
+$db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+$form_info = $db_handle->runFetch();
 $q_has_null_form = false;       //will check later if a question has null html_form
 $nullCount = 0;
 if(!empty($questions)) {

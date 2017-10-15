@@ -1,4 +1,5 @@
-<?php session_start();
+<?php
+include("check_credentials.php");
 $ul_muser = "active"; $ul_forms = ""; $ul_idp =""; include ('sidebar.php');
 unset($_SESSION['form_id']);
 unset($_SESSION['form_name']);

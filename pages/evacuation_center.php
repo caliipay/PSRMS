@@ -1,8 +1,6 @@
-<?php session_start(); $ul_evac ="active"; include ('sidebar.php'); ?>
+<?php include("check_credentials.php"); $_SESSION['loc']=$_SERVER['PHP_SELF']; $ul_evac ="active"; include ('sidebar.php'); ?>
 <?php include ('head.php'); ?>
-
-    <div class="main-panel">
-        
+<div class="main-panel">
 <?php include ('navbar.php'); ?>
 
 <?php include ('footer.php'); ?>

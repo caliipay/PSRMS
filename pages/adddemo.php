@@ -33,9 +33,9 @@ if(isset($_POST['net_income'])) $db_handle->bindVar(':MNetIncome', $_POST['net_i
 if(isset($_POST['Religion'])) $db_handle->bindVar(':Religion', $_POST['Religion'], PDO::PARAM_STR,0); else $db_handle->bindNull(':Religion');
 if(isset($_POST['Ethnicity'])) $db_handle->bindVar(':Ethnicity', $_POST['Ethnicity'], PDO::PARAM_STR,0); else $db_handle->bindNull(':Ethnicity');
 if(isset($_POST['School'])) $db_handle->bindVar(':School', $_POST['School'], PDO::PARAM_STR,0); else $db_handle->bindNull(':School');
-$db_handle->runUpdate();
-
-echo "<script type='text/javascript'>alert('Success!');
+//$db_handle->runUpdate();
+echo(json_encode($_POST));
+/*echo "<script type='text/javascript'>alert('Success!');
 location='".$_SESSION['loc']."';
-</script>";
+</script>";*/
 ?>

@@ -13,12 +13,15 @@ include ('head.php');
     <?php include ('navbar.php'); ?>
 
     <?php
-    require_once("dbcontroller.php");
+    require_once("dbcontrollerPDO.php");
     $idpID = $_GET['id'];
     $userID = $_SESSION['UserID'];
     $db_handle = new DBController();
-    $forms = $db_handle->runFetch("SELECT * FROM `form` WHERE 1 ORDER BY FormType");
-    $idp = $db_handle->runFetch("SELECT * FROM `idp` WHERE IDP_ID = ".$idpID);
+    $db_handle->prepareStatement("SELECT * FROM `form` WHERE 1 ORDER BY FormType");
+    $forms = $db_handle->runFetch();
+    $db_handle->prepareStatement("SELECT * FROM `idp` WHERE IDP_ID = :idpID");
+    $db_handle->bindVar(':idpID', $idpID, PDO::PARAM_INT,0);
+    $idp = $db_handle->runFetch();
     $idp_name;
     $idp_age_group;
     ?>

@@ -1,10 +1,12 @@
 <?php
 session_start();
-require_once("dbcontroller.php");
+require_once("dbcontrollerPDO.php");
 $db_handle = new DBController();
 $idp_id = $_GET['id'];
 
-$idps = $db_handle->runFetch("SELECT * FROM `idp` WHERE idp.IDP_ID = ".$idp_id);
+$db_handle->prepareStatement("SELECT * FROM `idp` WHERE idp.IDP_ID = :id");
+$db_handle->bindVar(':id', $idp_id, PDO::PARAM_INT,0);
+$idps = $db_handle->runFetch();
 
 if(!empty($idps)) {
     foreach ($idps as $idp) {
@@ -52,13 +54,19 @@ if(!empty($idps)) {
                                 <?php
         $id = $idp['IDP_ID'];
 
-                             $unique_idps = $db_handle->runFetch("SELECT * FROM idp WHERE IDP_ID =$id");
-
-                             $idp_sectors = $db_handle->runFetch("SELECT * FROM idp_sector WHERE IDP_IDP_ID = $id");
-
-                             $dafac_nos = $db_handle->runFetch("SELECT * FROM dafac_no WHERE DAFAC_SN = $id");
-
-                             $query2 = $db_handle->runFetch("SELECT * FROM idp, city_mun,province,barangay WHERE IDP_ID = $id AND Origin_Barangay=BarangayID AND City_Mun_ID = City_CityID AND PROVINCE_ProvinceID=ProvinceID");
+                             $id = $idp['IDP_ID'];
+                             $db_handle->prepareStatement("SELECT * FROM idp WHERE IDP_ID = :id");
+                             $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+                             $unique_idps = $db_handle->runFetch();
+                             $db_handle->prepareStatement("SELECT * FROM idp_sector WHERE IDP_IDP_ID = :id");
+                             $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+                             $idp_sectors = $db_handle->runFetch();
+                             $db_handle->prepareStatement("SELECT * FROM dafac_no WHERE DAFAC_SN = :id");
+                             $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+                             $dafac_nos = $db_handle->runFetch();
+                             $db_handle->prepareStatement("SELECT * FROM idp, city_mun,province,barangay WHERE IDP_ID = :id AND Origin_Barangay=BarangayID AND City_Mun_ID = City_CityID AND PROVINCE_ProvinceID=ProvinceID");
+                             $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+                             $query2 = $db_handle->runFetch();
 
                              if(!empty($unique_idps)) {
                                  foreach ($unique_idps as $result1) {
@@ -117,7 +125,9 @@ if(!empty($idps)) {
                                         <td style="border-top: 0px solid black">
                                             <?php
                                      $b_id =$result1['Origin_Barangay'];
-                                     $barangays = $db_handle->runFetch("SELECT * FROM barangay WHERE BarangayID = $b_id");
+                                     $db_handle->prepareStatement("SELECT * FROM barangay WHERE BarangayID = :barangay");
+                                     $db_handle->bindVar(':barangay', $b_id, PDO::PARAM_INT,0);
+                                     $barangays = $db_handle->runFetch();
                                      foreach ($barangays as $barangay) {
                                          $c_id =$barangay['City_CityID'];
                                          echo $barangay['BarangayName'];
@@ -126,7 +136,9 @@ if(!empty($idps)) {
                                         </td>
                                         <td style="border-top: 0px solid black">
                                             <?php
-                                     $citys = $db_handle->runFetch("SELECT * FROM city_mun WHERE City_Mun_ID = $c_id");
+                                     $db_handle->prepareStatement("SELECT * FROM city_mun WHERE City_Mun_ID = :city");
+                                     $db_handle->bindVar(':city', $c_id, PDO::PARAM_INT,0);
+                                     $citys = $db_handle->runFetch();
                                      foreach ($citys as $city) {
                                          $p_id = $city['PROVINCE_ProvinceID'];
                                          echo $city['City_Mun_Name'];
@@ -136,7 +148,9 @@ if(!empty($idps)) {
                                         <td style="border-top: 0px solid black"></td>
                                         <td style="border-top: 0px solid black">
                                             <?php
-                                     $provinces = $db_handle->runFetch("SELECT * FROM province WHERE ProvinceID = $p_id");
+                                     $db_handle->prepareStatement("SELECT * FROM province WHERE ProvinceID = :province");
+                                     $db_handle->bindVar(':province', $p_id, PDO::PARAM_INT,0);
+                                     $provinces = $db_handle->runFetch();
                                      foreach ($provinces as $province) {
                                          echo $province['ProvinceName'];
                                      }
@@ -193,7 +207,9 @@ if(!empty($idps)) {
                                 <h4 >SECTORS <hr></h4>
                                 <?php
 
-                                     $rows = $db_handle->runFetch("SELECT * FROM sector, idp_sector WHERE IDP_IDP_ID=$id AND idp_sector.SECTOR_SectorID = sector.SectorID");
+                                     $db_handle->prepareStatement("SELECT * FROM sector, idp_sector WHERE IDP_IDP_ID= :id AND idp_sector.SECTOR_SectorID = sector.SectorID");
+                                     $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+                                     $rows = $db_handle->runFetch();
                                      if(!empty($rows)) {
                                          foreach ($rows as $sql) {
                                              echo  $sql['Name'] ;
@@ -241,26 +257,39 @@ if(!empty($idps)) {
                                     </tr>
                                 </thead>
                                 <?php
-                                    $results = $db_handle->runFetch("SELECT intake_answers.IDP_IDP_ID as IDP, intake_answers.INTAKE_ANSWERS_ID, IF(intake_answers.INTAKE_IntakeID = 1, 'Intake for Adults', 'Intake for Children') as FormID, CONCAT(user.Lname, ', ', user.Fname, ' ', user.Mname) as User, intake_answers.Date_taken as DateTaken, 'N/A' as Score FROM intake_answers
-                            JOIN
-                            intake ON intake_answers.INTAKE_IntakeID = intake.IntakeID
-                            JOIN
-                            user ON user.UserID = intake_answers.USER_UserID
-                            where intake_answers.IDP_IDP_ID = ".$idp['IDP_ID']."
-                            ORDER BY DateTaken DESC");
+                                    $db_handle->prepareStatement("SELECT intake_answers.IDP_IDP_ID as IDP, intake_answers.INTAKE_ANSWERS_ID, IF(intake_answers.INTAKE_IntakeID = 2, 'Intake for Adults', 'Intake for Children') as FormID, CONCAT(user.Lname, ', ', user.Fname, ' ', user.Mname) as User, intake_answers.Date_taken as DateTaken, 'N/A' as Score FROM intake_answers
+                                    JOIN
+                                    intake ON intake_answers.INTAKE_IntakeID = intake.IntakeID
+                                    JOIN
+                                    user ON user.UserID = intake_answers.USER_UserID
+                                    where intake_answers.IDP_IDP_ID = :idpID
+                                    ORDER BY DateTaken DESC");
+                                    $db_handle->bindVar(':idpID', $idp['IDP_ID'], PDO::PARAM_INT,0);
+                                    $results = $db_handle->runFetch();
                              $order = 1;
                              if(!empty($results)) {
                                  foreach ($results as $forms) {
-                                     $intake_answers = $db_handle->runFetch("SELECT
-                                (SELECT Answer FROM answers_quanti JOIN intake_answers on intake_answers.INTAKE_ANSWERS_ID = answers_quanti.INTAKE_ANSWERS_INTAKE_ANSWERS_ID WHERE IDP_IDP_ID = ".$idp['IDP_ID']." AND INTAKE_ANSWERS_ID = ".$forms['INTAKE_ANSWERS_ID']." AND QUESTIONS_QuestionsID = 216) as Result1,
-                                (SELECT Answer FROM answers_quanti JOIN intake_answers on intake_answers.INTAKE_ANSWERS_ID = answers_quanti.INTAKE_ANSWERS_INTAKE_ANSWERS_ID WHERE IDP_IDP_ID = ".$idp['IDP_ID']." AND INTAKE_ANSWERS_ID = ".$forms['INTAKE_ANSWERS_ID']." AND QUESTIONS_QuestionsID = 217) as Result2,
-                                (SELECT Answer FROM answers_quali JOIN intake_answers on intake_answers.INTAKE_ANSWERS_ID = answers_quali.INTAKE_ANSWERS_INTAKE_ANSWERS_ID WHERE IDP_IDP_ID = ".$idp['IDP_ID']." AND INTAKE_ANSWERS_ID = ".$forms['INTAKE_ANSWERS_ID']." AND QUESTIONS_QuestionsID = 218) as Result3,
-                                (SELECT Answer FROM answers_quanti JOIN intake_answers on intake_answers.INTAKE_ANSWERS_ID = answers_quanti.INTAKE_ANSWERS_INTAKE_ANSWERS_ID WHERE IDP_IDP_ID = ".$idp['IDP_ID']." AND INTAKE_ANSWERS_ID = ".$forms['INTAKE_ANSWERS_ID']." AND QUESTIONS_QuestionsID = 219) as Result4");
+                                     if($forms["FormID"] == "Intake for Adults") {
+                                         $db_handle->prepareStatement("SELECT
+                                        (SELECT Answer FROM answers_quanti JOIN intake_answers on intake_answers.INTAKE_ANSWERS_ID = answers_quanti.INTAKE_ANSWERS_INTAKE_ANSWERS_ID WHERE IDP_IDP_ID = :idpID AND INTAKE_ANSWERS_ID = :formID AND QUESTIONS_QuestionsID = 220) as Result1,
+                                        (SELECT Answer FROM answers_quanti JOIN intake_answers on intake_answers.INTAKE_ANSWERS_ID = answers_quanti.INTAKE_ANSWERS_INTAKE_ANSWERS_ID WHERE IDP_IDP_ID = :idpID AND INTAKE_ANSWERS_ID = :formID AND QUESTIONS_QuestionsID = 221) as Result2,
+                                        (SELECT Answer FROM answers_quali JOIN intake_answers on intake_answers.INTAKE_ANSWERS_ID = answers_quali.INTAKE_ANSWERS_INTAKE_ANSWERS_ID WHERE IDP_IDP_ID = :idpID AND INTAKE_ANSWERS_ID = :formID AND QUESTIONS_QuestionsID = 222) as Result3,
+                                        (SELECT Answer FROM answers_quanti JOIN intake_answers on intake_answers.INTAKE_ANSWERS_ID = answers_quanti.INTAKE_ANSWERS_INTAKE_ANSWERS_ID WHERE IDP_IDP_ID = :idpID AND INTAKE_ANSWERS_ID = :formID AND QUESTIONS_QuestionsID = 223) as Result4");
+                                     } else {
+                                         $db_handle->prepareStatement("SELECT
+                                        (SELECT Answer FROM answers_quanti JOIN intake_answers on intake_answers.INTAKE_ANSWERS_ID = answers_quanti.INTAKE_ANSWERS_INTAKE_ANSWERS_ID WHERE IDP_IDP_ID = :idpID AND INTAKE_ANSWERS_ID = :formID AND QUESTIONS_QuestionsID = 216) as Result1,
+                                        (SELECT Answer FROM answers_quanti JOIN intake_answers on intake_answers.INTAKE_ANSWERS_ID = answers_quanti.INTAKE_ANSWERS_INTAKE_ANSWERS_ID WHERE IDP_IDP_ID = :idpID AND INTAKE_ANSWERS_ID = :formID AND QUESTIONS_QuestionsID = 217) as Result2,
+                                        (SELECT Answer FROM answers_quali JOIN intake_answers on intake_answers.INTAKE_ANSWERS_ID = answers_quali.INTAKE_ANSWERS_INTAKE_ANSWERS_ID WHERE IDP_IDP_ID = :idpID AND INTAKE_ANSWERS_ID = :formID AND QUESTIONS_QuestionsID = 218) as Result3,
+                                        (SELECT Answer FROM answers_quanti JOIN intake_answers on intake_answers.INTAKE_ANSWERS_ID = answers_quanti.INTAKE_ANSWERS_INTAKE_ANSWERS_ID WHERE IDP_IDP_ID = :idpID AND INTAKE_ANSWERS_ID = :formID AND QUESTIONS_QuestionsID = 219) as Result4");
+                                     }
+                                     $db_handle->bindVar(':idpID', $forms['IDP'], PDO::PARAM_INT,0);
+                                     $db_handle->bindVar(':formID', $forms['INTAKE_ANSWERS_ID'], PDO::PARAM_INT,0);
+                                     $intake_answers = $db_handle->runFetch();
                                 ?>
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <h6><?php echo $order; ?></h6>
+                                            <h6><?php echo $order;// echo($answer['Result1'].", ".$answer['Result2'].", ".$answer['Result3'].", ".$answer['Result4']) ?></h6>
                                         </td>
                                         <td>
                                             <h6>
@@ -363,16 +392,18 @@ if(!empty($idps)) {
                                     </thead>
                                     <tbody>
                                         <?php
-                             $results = $db_handle->runFetch("SELECT A.IDP_IDP_ID as IDP, A.FORM_ANSWERS_ID, FormType as FormID, A.User as User, A.DateTaken, Score, A.UnansweredItems, A.Assessment, A.Cutoff, A.FORM_FormID FROM
+                             $db_handle->prepareStatement("SELECT A.IDP_IDP_ID as IDP, A.FORM_ANSWERS_ID, FormType as FormID, A.User as User, A.DateTaken, Score, A.UnansweredItems, A.Assessment, A.Cutoff, A.FORM_FormID FROM
                             (SELECT form_answers.IDP_IDP_ID, form_answers.FORM_ANSWERS_ID, FormType, form_answers.USER_UserID, form_answers.DateTaken, form_answers.UnansweredItems, CONCAT(user.Lname, ', ', user.Fname, ' ', user.Mname) as User, auto_assmt.Assessment, auto_assmt.Cutoff,auto_assmt.FORM_FormID FROM form_answers
                             JOIN form on form.FormID = form_answers.FORM_FormID
                             JOIN user on user.UserID = form_answers.USER_UserID
                             LEFT JOIN auto_assmt on auto_assmt.FORM_FormID = form_answers.FORM_FormID
-                            where form_answers.IDP_IDP_ID = ".$idp['IDP_ID'].") A
+                            where form_answers.IDP_IDP_ID = :idpID) A
                             RIGHT JOIN
-                            (SELECT DISTINCT(IDP_IDP_ID), FORM_ANSWERS_ID, COALESCE(SUM(answers_quanti.Answer),0) as Score FROM answers_quanti RIGHT JOIN form_answers ON form_answers.FORM_ANSWERS_ID = answers_quanti.FORM_ANWERS_FORM_ANSWERS_ID where form_answers.IDP_IDP_ID = ".$idp['IDP_ID']." GROUP BY FORM_ANWERS_FORM_ANSWERS_ID) B
+                            (SELECT DISTINCT(IDP_IDP_ID), FORM_ANSWERS_ID, COALESCE(SUM(answers_quanti.Answer),0) as Score FROM answers_quanti RIGHT JOIN form_answers ON form_answers.FORM_ANSWERS_ID = answers_quanti.FORM_ANWERS_FORM_ANSWERS_ID where form_answers.IDP_IDP_ID = :idpID GROUP BY FORM_ANWERS_FORM_ANSWERS_ID) B
                             ON A.FORM_ANSWERS_ID = B.FORM_ANSWERS_ID
                             ORDER BY DateTaken DESC");
+                             $db_handle->bindVar(':idpID', $idp['IDP_ID'], PDO::PARAM_INT,0);
+                             $results = $db_handle->runFetch();
                              $order = 1;
                              if(!empty($results)) {
                                  foreach ($results as $forms) {

@@ -1,48 +1,48 @@
-        <?php include ('head.php'); ?>
+        <?php require('check_credentials.php'); include ('head.php'); ?>
         <?php include ('footer.php'); ?>
         
         <?php
-            require_once("dbcontroller.php");
-            require('check_credentials.php');
+            require_once("dbcontrollerPDO.php");
             include("css_include.php");
             $idpID = $_GET['id'];
             $userID = $_SESSION['UserID'];
             $formID;
-            $ag = $_GET['ag'];
+            if(!filter_var($idpID, FILTER_VALIDATE_INT) === false) {
+                $ag = $_GET['ag'];
+            } else {
+                $ag = 0;
+            }
             if($ag == 1) {
+                //children
                 $formID = 1;
             } else if($ag == 2) {
+                //adults
                 $formID = 2;
+            } else {
+                $formID = 0;
             }
             $db_handle = new DBController();
-            $_SESSION['intake_previous'] = $_SERVER['HTTP_REFERER'];
-            $questions = $db_handle->runFetch("SELECT * FROM `questions` WHERE INTAKE_IntakeID = ".$formID);
-            $html_forms = $db_handle->runFetch("SELECT * FROM `html_form` WHERE 1");
+            $db_handle->prepareStatement("SELECT * FROM `questions` WHERE INTAKE_IntakeID = :formID");
+            $db_handle->bindVar(':formID', $formID, PDO::PARAM_INT,0);
+            $questions = $db_handle->runFetch();
+            $db_handle->prepareStatement("SELECT * FROM `html_form` WHERE 1");
+            $html_forms = $db_handle->runFetch();
         
             //Very long query to automatically get the addresses as complete string [instead of fk_ids]
-            $idp = $db_handle->runFetch("Select idp.IDP_ID, CONCAT(Lname, ', ', Fname, ' ', Mname) as IDPName, idp.Age, idp.Gender, idp.Education, idp.MaritalStatus, idp.PhoneNum, Origin_Address, EvacTable.EvacName, Evac_Address, EvacTable.EvacType, idp.Email, idp.Occupation, idp.Remarks, idp.SpecificAddress from idp
-
-            JOIN
-
+            $db_handle->prepareStatement("Select idp.IDP_ID, CONCAT(Lname, ', ', Fname, ' ', Mname) as IDPName, idp.Age, idp.Gender, idp.Education, idp.MaritalStatus, idp.PhoneNum, Origin_Address, EvacTable.EvacName, Evac_Address, EvacTable.EvacType, idp.Email, idp.Occupation, idp.Remarks, idp.SpecificAddress from idp
+            LEFT JOIN
             evacuation_centers on evacuation_centers.EvacuationCentersID = idp.EvacuationCenters_EvacuationCentersID
-
-            JOIN
-
-            (Select idp.IDP_ID, idp.Origin_Barangay, CONCAT(barangay.BarangayName, ', ', city_mun.City_Mun_Name, ' City, ', province.ProvinceName) as Origin_Address From barangay JOIN city_mun ON city_mun.City_Mun_ID = barangay.City_CityID Join province ON city_mun.PROVINCE_ProvinceID = province.ProvinceID JOIN idp on idp.Origin_Barangay = barangay.BarangayID where barangay.BarangayID = idp.Origin_Barangay)
-
+            LEFT JOIN
+            (Select idp.IDP_ID, idp.Origin_Barangay, CONCAT(barangay.BarangayName, ', ', city_mun.City_Mun_Name, ', ', province.ProvinceName) as Origin_Address From barangay LEFT JOIN city_mun ON city_mun.City_Mun_ID = barangay.City_CityID Join province ON city_mun.PROVINCE_ProvinceID = province.ProvinceID LEFT JOIN idp on idp.Origin_Barangay = barangay.BarangayID where barangay.BarangayID = idp.Origin_Barangay)
             AS OriginTable
-
             ON OriginTable.IDP_ID = idp.IDP_ID
-
-            JOIN
-
-            (Select idp.IDP_ID, idp.EvacuationCenters_EvacuationCentersID, evacuation_centers.EvacType, evacuation_centers.EvacName, evacuation_centers.EvacAddress as EvacAddressID, CONCAT(barangay.BarangayName, ', ', city_mun.City_Mun_Name, ' City, ', province.ProvinceName) as Evac_Address From idp JOIN evacuation_centers ON idp.EvacuationCenters_EvacuationCentersID = evacuation_centers.EvacuationCentersID JOIN barangay ON barangay.BarangayID = evacuation_centers.EvacAddress JOIN city_mun ON city_mun.City_Mun_ID = barangay.City_CityID JOIN province ON city_mun.PROVINCE_ProvinceID = province.ProvinceID where barangay.BarangayID = evacuation_centers.EvacAddress)
-
+            LEFT JOIN
+            (Select idp.IDP_ID, idp.EvacuationCenters_EvacuationCentersID, evacuation_centers.EvacType, evacuation_centers.EvacName, evacuation_centers.EvacAddress as EvacAddressID, CONCAT(barangay.BarangayName, ', ', city_mun.City_Mun_Name, ', ', province.ProvinceName) as Evac_Address From idp LEFT JOIN evacuation_centers ON idp.EvacuationCenters_EvacuationCentersID = evacuation_centers.EvacuationCentersID LEFT JOIN barangay ON barangay.BarangayID = evacuation_centers.EvacAddress LEFT JOIN city_mun ON city_mun.City_Mun_ID = barangay.City_CityID LEFT JOIN province ON city_mun.PROVINCE_ProvinceID = province.ProvinceID where barangay.BarangayID = evacuation_centers.EvacAddress)
             AS EvacTable
-
             ON EvacTable.IDP_ID = idp.IDP_ID
-
-            WHERE idp.IDP_ID = ".$idpID);
+            WHERE idp.IDP_ID = :idpID");
+            $db_handle->bindVar(':idpID', $idpID, PDO::PARAM_INT,0);
+            $idp = $db_handle->runFetch();
             $education;
         ?>
         <style>
@@ -96,7 +96,7 @@
                       <div class="panel-body" style=" padding: 0 50px;">
                         <?php if(!empty($idp)) {
                                 foreach ($idp as $result) {
-                                    if($ag === '1') {
+                                    if($ag === '2') {
                             ?>
                         <div class="row">
                             <div class="col-md-12">
@@ -132,7 +132,7 @@
                                     </div>
                                   <!-- </div>
                                 </div> -->
-                                <?php } else if($ag === '2') { ?> 
+                                <?php } else if($ag === '1') { ?> 
                                 <!-- <div class="panel panel-info">
                                   <div class="panel-heading">IDP Information</div>
                                   <div class="panel-body"> -->
@@ -148,9 +148,6 @@
                                             if(isset($result['Education'])) {
                                                 echo('<p class="field-label"><b>Education: </b>'.$result['Education'].'</p>');
                                             }
-                                            /*if(isset($result['Education'])) {
-                                                echo('<p class="field-label"><b>Name of school: </b></p>');
-                                            }*/
                                         ?>
                                         <p class="field-label"><b>Name of mother: </b></p>
                                         <p class="field-label"><b>Name of father: </b></p>

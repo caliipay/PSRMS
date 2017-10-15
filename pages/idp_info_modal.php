@@ -1,9 +1,10 @@
 <?php
-require_once("dbcontroller.php");
+require_once("dbcontrollerPDO.php");
 $db_handle = new DBController();
 $idp_id = $_GET['id'];
-
-$idps = $db_handle->runFetch("SELECT * FROM `idp` WHERE idp.IDP_ID = ".$idp_id);
+$db_handle->prepareStatement("SELECT * FROM `idp` WHERE idp.IDP_ID = :id");
+$db_handle->bindVar(':id', $idp_id, PDO::PARAM_INT,0);
+$idps = $db_handle->runFetch();
 if(!empty($idps)) {
     foreach ($idps as $idp) {
 ?> 
@@ -16,25 +17,28 @@ if(!empty($idps)) {
             <!-- Modal content -->
             <div class="modal-content">
                 <div class="modal-header">
-                    <span id = "<?php echo($idp['IDP_ID']) ?>" class="close" onclick="close_modal(this.id)">&times;</span>
+                    <span id = "<?php echo($idp['IDP_ID']); ?>" class="close" onclick="close_modal(this.id)">&times;</span>
                     <h2>
-                        <?php echo($idp['Fname']) ?>&nbsp<?php echo($idp['Mname']) ?>&nbsp<?php echo($idp['Lname']) ?>
+                        <?php echo($idp['Fname']); ?>&nbsp<?php echo($idp['Mname']) ?>&nbsp<?php echo($idp['Lname']); ?>
                         <span><h5><sup>Personal Information</sup></h5></span>
                     </h2>
 
                 </div>
                 <div class="modal-body">
                     <?php
-        $id = $idp['IDP_ID'];
-
-                             $unique_idps = $db_handle->runFetch("SELECT * FROM idp WHERE IDP_ID =$id");
-
-                             $idp_sectors = $db_handle->runFetch("SELECT * FROM idp_sector WHERE IDP_IDP_ID = $id");
-
-                             $dafac_nos = $db_handle->runFetch("SELECT * FROM dafac_no WHERE DAFAC_SN = $id");
-
-                             $query2 = $db_handle->runFetch("SELECT * FROM idp, city_mun,province,barangay WHERE IDP_ID = $id AND Origin_Barangay=BarangayID AND City_Mun_ID = City_CityID AND PROVINCE_ProvinceID=ProvinceID");
-
+                             $id = $idp['IDP_ID'];
+                             $db_handle->prepareStatement("SELECT * FROM idp WHERE IDP_ID = :id");
+                             $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+                             $unique_idps = $db_handle->runFetch();
+                             $db_handle->prepareStatement("SELECT * FROM idp_sector WHERE IDP_IDP_ID = :id");
+                             $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+                             $idp_sectors = $db_handle->runFetch();
+                             $db_handle->prepareStatement("SELECT * FROM dafac_no WHERE DAFAC_SN = :id");
+                             $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+                             $dafac_nos = $db_handle->runFetch();
+                             $db_handle->prepareStatement("SELECT * FROM idp, city_mun,province,barangay WHERE IDP_ID = :id AND Origin_Barangay=BarangayID AND City_Mun_ID = City_CityID AND PROVINCE_ProvinceID=ProvinceID");
+                             $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+                             $query2 = $db_handle->runFetch();
                              if(!empty($unique_idps)) {
                                  foreach ($unique_idps as $result1) {
                     ?>
@@ -92,7 +96,9 @@ if(!empty($idps)) {
                             <td style="border-top: 0px solid black">
                                 <?php
                                      $b_id =$result1['Origin_Barangay'];
-                                     $barangays = $db_handle->runFetch("SELECT * FROM barangay WHERE BarangayID = $b_id");
+                                     $db_handle->prepareStatement("SELECT * FROM barangay WHERE BarangayID = :barangay");
+                                     $db_handle->bindVar(':barangay', $b_id, PDO::PARAM_INT,0);
+                                     $barangays = $db_handle->runFetch();
                                      foreach ($barangays as $barangay) {
                                          $c_id =$barangay['City_CityID'];
                                          echo $barangay['BarangayName'];
@@ -101,7 +107,9 @@ if(!empty($idps)) {
                             </td>
                             <td style="border-top: 0px solid black">
                                 <?php
-                                     $citys = $db_handle->runFetch("SELECT * FROM city_mun WHERE City_Mun_ID = $c_id");
+                                     $db_handle->prepareStatement("SELECT * FROM city_mun WHERE City_Mun_ID = :city");
+                                     $db_handle->bindVar(':city', $c_id, PDO::PARAM_INT,0);
+                                     $citys = $db_handle->runFetch();
                                      foreach ($citys as $city) {
                                          $p_id = $city['PROVINCE_ProvinceID'];
                                          echo $city['City_Mun_Name'];
@@ -111,7 +119,9 @@ if(!empty($idps)) {
                             <td style="border-top: 0px solid black"></td>
                             <td style="border-top: 0px solid black">
                                 <?php
-                                     $provinces = $db_handle->runFetch("SELECT * FROM province WHERE ProvinceID = $p_id");
+                                     $db_handle->prepareStatement("SELECT * FROM province WHERE ProvinceID = :province");
+                                     $db_handle->bindVar(':province', $p_id, PDO::PARAM_INT,0);
+                                     $provinces = $db_handle->runFetch();
                                      foreach ($provinces as $province) {
                                          echo $province['ProvinceName'];
                                      }
@@ -167,8 +177,9 @@ if(!empty($idps)) {
 
                     <h4 >SECTORS <hr></h4>
                     <?php
-
-                                     $rows = $db_handle->runFetch("SELECT * FROM sector, idp_sector WHERE IDP_IDP_ID=$id AND idp_sector.SECTOR_SectorID = sector.SectorID");
+                                     $db_handle->prepareStatement("SELECT * FROM sector, idp_sector WHERE IDP_IDP_ID= :id AND idp_sector.SECTOR_SectorID = sector.SectorID");
+                                     $db_handle->bindVar(':id', $id, PDO::PARAM_INT,0);
+                                     $rows = $db_handle->runFetch();
                                      if(!empty($rows)) {
                                          foreach ($rows as $sql) {
                                              echo  $sql['Name'];

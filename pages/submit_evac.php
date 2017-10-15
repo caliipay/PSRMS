@@ -1,33 +1,26 @@
 <?php
-  session_start();
-  require_once("dbcontroller.php");
+include("check_credentials.php");
+require_once("dbcontrollerPDO.php");
 $db_handle = new DBController();
+$ename = $_POST['Ename'];
+$barangay = $_POST['selected_barangay'];
+$evac_type = $_POST['evac_type'];
+$manager = $_POST['manager'];
+$contact = $_POST['contact'];
+$address = $_POST['address'];
+$db_handle->prepareStatement("INSERT INTO `evacuation_centers`(`EvacName`, `EvacAddress`, `EvacType`, `EvacManager`, `EvacManagerContact`, `SpecificAddress`) VALUES (:evacName, :evacAddress, :evacType, :evacManager, :evacManagerContact, :specificAddress)");
+$db_handle->bindVar(':evacName', $ename, PDO::PARAM_STR,0);
+$db_handle->bindVar(':evacAddress', $barangay, PDO::PARAM_INT,0);
+$db_handle->bindVar(':evacType', $evac_type, PDO::PARAM_INT,0);
+$db_handle->bindVar(':evacManager', $manager, PDO::PARAM_STR,0);
+$db_handle->bindVar(':evacManagerContact', $contact, PDO::PARAM_STR,0);
+$db_handle->bindVar(':specificAddress', $address, PDO::PARAM_STR,0);
+$db_handle->runUpdate();
 
-//$previous = $_SERVER['HTTP_REFERRER'];
-
-
-
-
-
-  $ename = $_POST['Ename'];
-  $barangay = $_POST['selected_barangay'];
-  $evac_type = $_POST['evac_type'];
-  $manager = $_POST['manager'];
-  $contact = $_POST['contact'];
-  $address = $_POST['address'];
-  echo "<script type='text/javascript'>alert('True!');
-                             
-                              </script>";
-
-   
-      $query = $db_handle->runUpdate("INSERT INTO `evacuation_centers`(`EvacName`, `EvacAddress`, `EvacType`, `EvacManager`, `EvacManagerContact`, `SpecificAddress`) VALUES ('".$ename."','".$barangay."','".$evac_type."','".$manager."','".$contact."','".$address."')");
-    
-                  if($db_handle->getUpdateStatus()) 
-                  {
-                      echo "<script type='text/javascript'>alert('Add Succesful1!');
-                      
-                      </script>";
-                  }
-
-                  
+if($db_handle->getUpdateStatus()) 
+{
+    echo "<script type='text/javascript'>alert('Add Succesful!');
+    location='".$_SESSION['loc']."';
+    </script>";
+}
 ?>
