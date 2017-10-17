@@ -14,7 +14,7 @@ if(isset($_POST["isIntake"])) {
     $db_handle->bindVar(':formID', $formID. PDO::PARAM_INT, 0);
     $form_info = $db_handle->runFetch();
     $itemStart = 0;
-    $db_handle->prepareStatement("SELECT INTAKE_IntakeID, QuestionsID, Question, html_form.HTML_FORM_TYPE as FormType, html_form.HTML_FORM_INPUT_QUANTITY as InputRange, AnswerType FROM intake JOIN questions on questions.INTAKE_IntakeID = intake.IntakeID JOIN html_form on questions.HTML_FORM_HTML_FORM_ID = html_form.HTML_FORM_ID WHERE intake.IntakeID = :formID");
+    $db_handle->prepareStatement("SELECT INTAKE_IntakeID, QuestionsID, Question, html_form.HTML_FORM_TYPE as FormType, html_form.HTML_FORM_INPUT_QUANTITY as InputRange, AnswerType FROM intake LEFT JOIN questions on questions.INTAKE_IntakeID = intake.IntakeID LEFT JOIN html_form on questions.HTML_FORM_HTML_FORM_ID = html_form.HTML_FORM_ID WHERE intake.IntakeID = :formID");
     $db_handle->bindVar(':formID', $formID, PDO::PARAM_INT, 0);
     $questions = $db_handle->runFetch();
 } else {
@@ -22,7 +22,7 @@ if(isset($_POST["isIntake"])) {
     $db_handle->bindVar(':formID', $formID, PDO::PARAM_INT,0);
     $form_info = $db_handle->runFetch();
     $itemStart = 0;
-    $db_handle->prepareStatement("SELECT FORM_FormID, QuestionsID, Question, html_form.HTML_FORM_TYPE as FormType, html_form.HTML_FORM_INPUT_QUANTITY as InputRange, AnswerType FROM form JOIN questions on questions.FORM_FormID = form.FormID JOIN html_form on questions.HTML_FORM_HTML_FORM_ID = html_form.HTML_FORM_ID WHERE form.FormID = :formID");
+    $db_handle->prepareStatement("SELECT FORM_FormID, QuestionsID, Question, html_form.HTML_FORM_TYPE as FormType, html_form.HTML_FORM_INPUT_QUANTITY as InputRange, AnswerType FROM form LEFT JOIN questions on questions.FORM_FormID = form.FormID LEFT JOIN html_form on questions.HTML_FORM_HTML_FORM_ID = html_form.HTML_FORM_ID WHERE form.FormID = :formID");
     $db_handle->bindVar(':formID', $formID, PDO::PARAM_INT,0);
     $questions = $db_handle->runFetch();
 }

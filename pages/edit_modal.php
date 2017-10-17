@@ -56,7 +56,7 @@ if($editing === "trans") {
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Add Translations</h4>
-                    <h5> Language: <input type="text" name="transLang" placeholder="Required field..."></h5>
+                    <h5> Language: <input type="text" name="transLang" placeholder="Required field..." required></h5>
                 </div>
                 <div class="modal-body">
                         <div>

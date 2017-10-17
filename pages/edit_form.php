@@ -5,7 +5,7 @@ $ul_forms = "active";
 include ('sidebar.php');
 include ('core_include.php');
 include ('head.php');
-
+$_SESSION['loc']=$_SERVER['REQUEST_URI'];
 $id = $_GET['form_id'];
 $db_handle = new DBController();
 $db_handle->prepareStatement("SELECT * FROM `questions` LEFT JOIN html_form ON html_form.HTML_FORM_ID = questions.HTML_FORM_HTML_FORM_ID WHERE FORM_FormID = :id");
